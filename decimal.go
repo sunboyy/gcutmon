@@ -1,6 +1,7 @@
 package gcutmon
 
 import (
+	"database/sql/driver"
 	"math"
 
 	"github.com/shopspring/decimal"
@@ -226,9 +227,20 @@ func (d Decimal) MarshalJSON() ([]byte, error) {
 
 // MarshalBinary not yet implemented
 
-// Scan not yet implemented
+// Scan implements the sql.Scanner interface for database deserialization.
+func (d *Decimal) Scan(value interface{}) error {
+	decimalValue := d.AsDecimal()
+	if err := decimalValue.Scan(value); err != nil {
+		return err
+	}
+	*d = Decimal(decimalValue)
+	return nil
+}
 
-// Value not yet implemented
+// Value implements the driver.Valuer interface for database serialization.
+func (d Decimal) Value() (driver.Value, error) {
+	return d.AsDecimal().Value()
+}
 
 // UnmarshalText not yet implemented
 
