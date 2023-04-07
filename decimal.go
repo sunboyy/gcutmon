@@ -136,7 +136,10 @@ func (d Decimal) IsZero() bool {
 	return d.AsDecimal().IsZero()
 }
 
-// Exponent not yet implemented
+// Exponent returns the exponent, or scale component of the decimal.
+func (d Decimal) Exponent() int32 {
+	return d.AsDecimal().Exponent()
+}
 
 // Coefficient not yet implemented
 
